@@ -3,6 +3,8 @@ package project;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,20 +12,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Servlet implementation class GetRestaurantsNearby
+ * Servlet implementation class RecommendRestaurants
  */
-@WebServlet("/GetRestaurantsNearby")
-public class GetRestaurantsNearby extends HttpServlet {
+@WebServlet("/RecommendRestaurants")
+public class RecommendRestaurants extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GetRestaurantsNearby() {
+    public RecommendRestaurants() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -32,16 +35,24 @@ public class GetRestaurantsNearby extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setContentType("application/json"); //what if I change it to txt
-		response.addHeader("Access-Control-Allow-Origin", "*");
-		String username = "";
-		PrintWriter out = response.getWriter();
-		if (request.getParameter("username") != null) {
-			 username = request.getParameter("username");
-			 out.print("Hello " + username);
-		 }
+		response.setContentType("application/json");
+	  	 response.addHeader("Access-Control-Allow-Origin", "*");
+	  	 String username = "";
+	  	 if (request.getParameter("username") != null) {
+	  		 username = request.getParameter("username");
+	  	 }
+	  	 JSONObject obj = new JSONObject();
+	  	 try {
+	  		 obj.append("username", username);
+	  	 } catch (JSONException e) {
+	  		 // TODO Auto-generated catch block
+	  		 e.printStackTrace();
+	  	 }
+	  	 PrintWriter out = response.getWriter();
+	  	 out.print(obj);
 	  	 out.flush();
 	  	 out.close();
+
 	}
 
 	/**
@@ -62,13 +73,12 @@ public class GetRestaurantsNearby extends HttpServlet {
 	  	 try {
 	  		 JSONObject input = new JSONObject(jb.toString());
 	  		 JSONObject output = new JSONObject();
-	  		 if (input.has("lat") && input.has("lon")) {
-	  			 double lat = (Double) input.get("lat");
-	  			 double lon = (Double) input.get("lon");
-	  			 output.append("lat", lat);
-	  			 output.append("lon", lon);
-	  			 output.append("name", "Panda Express");
-	  		 }
+	  		 List<String> list = new ArrayList<String>();
+	  		 list.add("panda express");
+	  		 list.add("hong kong express");
+	  		 list.add("chinatown express");
+	  		 JSONArray array = new JSONArray(list);
+	  		 output.append("name",array);
 	  		 response.setContentType("application/json");
 	  		 response.addHeader("Access-Control-Allow-Origin", "*");
 	  		 PrintWriter out = response.getWriter();
