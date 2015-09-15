@@ -20,6 +20,7 @@ import org.json.JSONObject;
 public class GetRestaurantsNearby extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
+	
     /**
      * @see HttpServlet#HttpServlet()
      */
